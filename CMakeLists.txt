@@ -81,19 +81,12 @@ if(NOT stanmath_POPULATED)
   FetchContent_Populate(stanmath)
 endif()
 
-
-# Now, you can use TBB::tbb as a target in your target_link_libraries:
-add_executable(g_benchmark main.cpp)
-target_include_directories(g_benchmark PRIVATE ${boost_INCLUDE_DIR} ${stanmath_SOURCE_DIR})
-target_compile_options(g_benchmark PRIVATE 
+add_compile_options(
   -DNO_FPRINTF_OUTPUT 
   -DBOOST_DISABLE_ASSERTS 
   -DTBB_INTERFACE_NEW 
   -D_REENTRANT 
-  -Wno-deprecated-declarations)
-target_link_libraries(g_benchmark PRIVATE 
-benchmark::benchmark 
-TBB::tbb 
-Eigen3::Eigen 
-sundials_kinsol 
-sundials_cvodes)
+  -Wno-deprecated-declarations -O3)
+
+include_directories(benchmarks)
+add_subdirectory(benchmarks)
