@@ -1,11 +1,10 @@
 #include <matmul_aos_soa/setup.hpp>
 // Just to kick off the stack allocation
-static void static_matmul_add(benchmark::State& state) {
-  using stan::math::var;
-  Eigen::Matrix<double, -1, -1> x_vals = Eigen::MatrixXd::Random(state.range(0), state.range(0));
-  Eigen::Matrix<double, -1, -1> y_vals = Eigen::MatrixXd::Random(state.range(0), state.range(0));
+static void matmul_add(benchmark::State& state) {
   using stan::math::var;
   using stan::math::sum;
+  Eigen::Matrix<double, -1, -1> x_vals = Eigen::MatrixXd::Random(state.range(0), state.range(0));
+  Eigen::Matrix<double, -1, -1> y_vals = Eigen::MatrixXd::Random(state.range(0), state.range(0));
   stan::math::var_value<Eigen::Matrix<double, -1, -1>> x = x_vals;
   stan::math::var_value<Eigen::Matrix<double, -1, -1>> y = y_vals;
   var lp = 0;
@@ -27,5 +26,5 @@ static void static_matmul_add(benchmark::State& state) {
 constexpr int start_val = 2;
 constexpr int end_val = 1024;
 BENCHMARK(toss_me);
-BENCHMARK(static_matmul_add)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
+BENCHMARK(matmul_add)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
 BENCHMARK_MAIN();
