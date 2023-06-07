@@ -19,10 +19,11 @@ static void multi_assign(benchmark::State& state) {
   const stan::model::index_multi idxs(idx_vec);
   for (auto _ : state) {
     Eigen::Matrix<var, -1, 1> x = x_vals;
+    Eigen::Matrix<var, -1, 1> z = x_vals;
     Eigen::Matrix<var, -1, 1> y = y_vals;
     auto start = std::chrono::high_resolution_clock::now();
     stan::model::assign(x, y, "", idxs);
-    sum(x).grad();
+    sum(x * z + z).grad();
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed_seconds =
       std::chrono::duration_cast<std::chrono::duration<double>>(end - start);

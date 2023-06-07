@@ -43,7 +43,7 @@ raw_compare_plot = ggplot(full_sum_cast_dt, aes(x = size, y = q0.5, color = type
   theme_bw()
 raw_compare_plot
 
-ggsave("./benchmarks/matmul_aos_soa/plots/raw_compare_plot.png", raw_compare_plot, width = 6, height = 4, units = "in")
+ggsave("./benchmarks/varmat_multi_assign/raw_compare_plot.png", raw_compare_plot, width = 6, height = 4, units = "in")
 
 log_compare_plot = ggplot(full_sum_cast_dt, aes(x = size, y = q0.5, color = type)) + 
   geom_point() + geom_line() + 
@@ -55,22 +55,29 @@ log_compare_plot = ggplot(full_sum_cast_dt, aes(x = size, y = q0.5, color = type
 
 log_compare_plot
 
-ggsave("./benchmarks/matmul_aos_soa/plots/log_compare_plot.png", log_compare_plot, width = 6, height = 4, units = "in")
+ggsave("./benchmarks/varmat_multi_assign/log_compare_plot.png", log_compare_plot, width = 6, height = 4, units = "in")
 
 full_cast_dt = dcast(full_dt[, .(name, cpu_time, type, size, idx)], name + size + idx ~ type, value.var = "cpu_time")
-full_cast_sum_dt = full_cast_dt[, .(custom_map_r = mean(custom_map / matvar),
- custom_map_sd = sd(custom_map / matvar),
- map_r = mean(map / matvar),
- set_r = mean(set / matvar),
- matvar_r = 1), .(size, name)]
+full_cast_sum_dt = full_cast_dt[, 
+.(custom_map_r = mean(custom_map / matvar),
+  custom_map_sd = sd(custom_map / matvar),
+  map_r = mean(map / matvar),
+  map_sd = sd(map / matvar),
+  set_r = mean(set / matvar),
+  matvar_r = 1), .(size, name)]
 
 full_cast_dt
 
-ggplot(full_cast_sum_dt, aes(x = size)) +
+mat_to_matvar = ggplot(full_cast_sum_dt, aes(x = size)) +
     geom_ribbon(aes(ymin = custom_map_r - custom_map_sd * 2, ymax = custom_map_r + custom_map_sd * 2), alpha = 0.2) +
     geom_line(aes(y = custom_map_r), color = "red") +
     geom_line(aes(y = matvar_r), color = "blue") +
-    ggtitle("Ratio of Custom Map (red) to Matvar (blue)") +
+    geom_ribbon(aes(ymin = map_r - map_sd * 2, ymax = map_r + map_sd * 2), alpha = 0.2) +
+    geom_line(aes(y = map_r), color = "black") +
+    ggtitle("Ratio of Custom Map (red), Map (black), and Matvar (blue)") +
     ylab("") + xlab("Vector Size") +
     theme_bw(base_size = 16)
- 
+
+mat_to_matvar
+
+ggsave("./benchmarks/varmat_multi_assign/map_to_matvar.png", mat_to_matvar, width = 6, height = 4, units = "in")
