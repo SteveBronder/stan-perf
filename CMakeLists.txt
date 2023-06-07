@@ -81,6 +81,17 @@ if(NOT stanmath_POPULATED)
   FetchContent_Populate(stanmath)
 endif()
 
+FetchContent_Declare(
+  stan
+  GIT_REPOSITORY https://github.com/stan-dev/stan
+  GIT_TAG        develop # replace with the version you want to use
+)
+
+FetchContent_GetProperties(stan)
+if(NOT stan_POPULATED)
+  FetchContent_Populate(stan)
+endif()
+
 add_compile_options(
   -DNO_FPRINTF_OUTPUT 
   -DBOOST_DISABLE_ASSERTS 
