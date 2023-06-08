@@ -1,9 +1,9 @@
 library(data.table)
 library(ggplot2)
-set_dt = fread("./benchmarks/varmat_multi_assign/varmat_set.csv", skip = "name,iterations")
-map_dt = fread("./benchmarks/varmat_multi_assign/varmat_map.csv", skip = "name,iterations")
-custom_map_dt = fread("./benchmarks/varmat_multi_assign/varmat_custom_map.csv", skip = "name,iterations")
-matvar_dt = fread("./benchmarks/varmat_multi_assign/matvar_multi.csv", skip = "name,iterations")
+set_dt = fread("./benchmarks/varmat_multi_assign/varmat_set2.csv", skip = "name,iterations")
+map_dt = fread("./benchmarks/varmat_multi_assign/varmat_map2.csv", skip = "name,iterations")
+custom_map_dt = fread("./benchmarks/varmat_multi_assign/varmat_custom_map2.csv", skip = "name,iterations")
+matvar_dt = fread("./benchmarks/varmat_multi_assign/matvar_multi2.csv", skip = "name,iterations")
 
 toss_unused = \(x) {
     x = x[!grepl("toss", name)]
@@ -39,23 +39,23 @@ raw_compare_plot = ggplot(full_sum_cast_dt, aes(x = size, y = q0.5, color = type
   geom_point() + geom_line() + 
   geom_ribbon(aes(ymin = q0.25, ymax = q0.75, fill = type), alpha = 0.2) +
   ylab("") + xlab("Matrix Size") +
-  ggtitle("Matrix Multiplication Time Vs. Size (AOS vs SOA)") +
+  ggtitle("Vector Multi Index Assignment + fma Time Vs. Size") +
   theme_bw()
 raw_compare_plot
 
-ggsave("./benchmarks/varmat_multi_assign/raw_compare_plot.png", raw_compare_plot, width = 6, height = 4, units = "in")
+ggsave("./benchmarks/varmat_multi_assign/raw_compare_plot2.png", raw_compare_plot, width = 6, height = 4, units = "in")
 
 log_compare_plot = ggplot(full_sum_cast_dt, aes(x = size, y = q0.5, color = type)) + 
   geom_point() + geom_line() + 
   geom_ribbon(aes(ymin = q0.25, ymax = q0.75, fill = type), alpha = 0.2) +
   ylab("") + xlab("Matrix Size") +
-  ggtitle("Matrix Multiplication Time Vs. Size on Log Scale (AOS vs SOA)") +
+  ggtitle("Vector Multi Index Assignment + fma Time Vs. Size") +
   scale_y_log10() +
   theme_bw()
 
 log_compare_plot
 
-ggsave("./benchmarks/varmat_multi_assign/log_compare_plot.png", log_compare_plot, width = 6, height = 4, units = "in")
+ggsave("./benchmarks/varmat_multi_assign/log_compare_plot2.png", log_compare_plot, width = 6, height = 4, units = "in")
 
 full_cast_dt = dcast(full_dt[, .(name, cpu_time, type, size, idx)], name + size + idx ~ type, value.var = "cpu_time")
 full_cast_sum_dt = full_cast_dt[, 
@@ -75,9 +75,9 @@ mat_to_matvar = ggplot(full_cast_sum_dt, aes(x = size)) +
     geom_ribbon(aes(ymin = map_r - map_sd * 2, ymax = map_r + map_sd * 2), alpha = 0.2) +
     geom_line(aes(y = map_r), color = "black") +
     ggtitle("Ratio of Custom Map (red), Map (black), and Matvar (blue)") +
-    ylab("") + xlab("Vector Size") +
+    ylab("") + xlab("Vector Size") + scale_y_continuous(breaks = seq(0, 1.8, 0.1)) +
     theme_bw(base_size = 16)
 
 mat_to_matvar
 
-ggsave("./benchmarks/varmat_multi_assign/map_to_matvar.png", mat_to_matvar, width = 6, height = 4, units = "in")
+ggsave("./benchmarks/varmat_multi_assign/map_to_matvar2.png", mat_to_matvar, width = 6, height = 4, units = "in")

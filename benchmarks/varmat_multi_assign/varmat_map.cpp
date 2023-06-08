@@ -80,7 +80,7 @@ static void multi_assign(benchmark::State& state) {
     var_value<Eigen::Matrix<double, -1, 1>> y = y_vals;
     auto start = std::chrono::high_resolution_clock::now();
     new_assign(x, y, "", idxs);
-    sum(x * z + z).grad();
+    sum(stan::math::add(stan::math::dot_product(x, z), z)).grad();
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed_seconds =
       std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
