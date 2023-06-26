@@ -17,7 +17,7 @@ cd ./build
 make matmul_soa matmul_aos
 ```
 
-3. Run each test saving their results to local folder. Here we use `taskset -c 0` to pin the benchmark to the first cpu.
+3. Use the script in the folders `readme.md` to run each test saving their results to local folder. Here we use `taskset -c 0` to pin the benchmark to the first cpu.
 
 ```bash
 taskset -c 11 ./benchmarks/matmul_aos_soa/matmul_soa --benchmark_out_format=csv --benchmark_out=./benchmarks/matmul_aos_soa/matmul_soa.csv --benchmark_repetitions=30 --benchmark_report_aggregates_only=false

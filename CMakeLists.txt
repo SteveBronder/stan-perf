@@ -4,7 +4,7 @@ project(
     VERSION 0.0.1
     LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 set(CMAKE_VERBOSE_MAKEFILE YES)
@@ -97,7 +97,7 @@ add_compile_options(
   -DBOOST_DISABLE_ASSERTS 
   -DTBB_INTERFACE_NEW 
   -D_REENTRANT 
-  -Wno-deprecated-declarations -O3)
+  -Wno-deprecated-declarations -O3 -march=native -mtune=native)
 
 include_directories(benchmarks)
 add_subdirectory(benchmarks)
