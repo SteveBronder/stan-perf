@@ -28,4 +28,4 @@ endif()
 
 add_executable(burst_orig burst_orig.cpp)
 target_include_directories(burst_orig PRIVATE ${oscode_orig_SOURCE_DIR}/include)
-target_link_libraries(burst_orig PRIVATE benchmark::benchmark)
+target_link_libraries(burst_orig PRIVATE Eigen3::Eigen benchmark::benchmark)
