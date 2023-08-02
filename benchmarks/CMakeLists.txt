@@ -1,2 +1,3 @@
 add_subdirectory(matmul_aos_soa)
 add_subdirectory(varmat_multi_assign)
+add_subdirectory(move_stuff)

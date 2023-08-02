@@ -97,7 +97,7 @@ add_compile_options(
   -DBOOST_DISABLE_ASSERTS 
   -DTBB_INTERFACE_NEW 
   -D_REENTRANT 
-  -Wno-deprecated-declarations -O3)
+  -Wno-deprecated-declarations -O3 -march=native -mtune=native)
 
 include_directories(benchmarks)
 add_subdirectory(benchmarks)
