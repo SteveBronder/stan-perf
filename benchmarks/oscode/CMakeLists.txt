@@ -1,7 +1,7 @@
 FetchContent_Declare(
   oscode_new
   GIT_REPOSITORY https://github.com/SteveBronder/oscode
-  GIT_TAG        fixes/cleanup # replace with the version you want to use
+  GIT_TAG        cleanup/warnings # replace with the version you want to use
 )
 
 FetchContent_GetProperties(oscode_new)
@@ -9,6 +9,10 @@ if(NOT oscode_new_POPULATED)
   FetchContent_Populate(oscode_new)
 endif()
 
+
+add_executable(burst_dense burst_dense.cpp)
+target_include_directories(burst_dense PRIVATE ${oscode_new_SOURCE_DIR}/include)
+target_link_libraries(burst_dense PRIVATE Eigen3::Eigen benchmark::benchmark)
 
 add_executable(burst burst.cpp)
 target_include_directories(burst PRIVATE ${oscode_new_SOURCE_DIR}/include)
@@ -25,6 +29,10 @@ if(NOT oscode_orig_POPULATED)
   FetchContent_Populate(oscode_orig)
 endif()
 
+
+add_executable(burst_orig_dense burst_orig_dense.cpp)
+target_include_directories(burst_orig_dense PRIVATE ${oscode_orig_SOURCE_DIR}/include)
+target_link_libraries(burst_orig_dense PRIVATE Eigen3::Eigen benchmark::benchmark)
 
 add_executable(burst_orig burst_orig.cpp)
 target_include_directories(burst_orig PRIVATE ${oscode_orig_SOURCE_DIR}/include)

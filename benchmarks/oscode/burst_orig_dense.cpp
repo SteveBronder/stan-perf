@@ -58,7 +58,7 @@ std::vector<T> linspace(T start, T end, std::size_t points) {
 
 
 static void burst(benchmark::State& state) {
-  double n = state.range(0);
+   double n = state.range(0);
   /** Define integration range */
   const double ti = -2 * state.range(0);
   const double tf = 2 * state.range(0);
@@ -66,15 +66,14 @@ static void burst(benchmark::State& state) {
   /** Define initial conditions */
   std::complex<double> x0 = xburst(ti, n); 
   std::complex<double> dx0 = dxburst(ti, n); 
+  std::vector<double> times = linspace(ti, tf, 1000);
   /** Create differential equation "system" */
   /** Method 1: Give frequency and damping term as functions */
   for (auto _ : state) {
     de_system sys(&w, &g, reinterpret_cast<void*>(&n));
-    Solution solution(sys, x0, dx0, ti, tf);
+    Solution solution(sys, x0, dx0, ti, tf, times);
     benchmark::DoNotOptimize(&solution);
     solution.solve();
-        std::cout << "t: " << solution.ssteps << " Wkb: " << solution.wkbsteps <<  " rk: " << 
-      solution.ssteps - solution.wkbsteps << std::endl;
   }
 }
 
