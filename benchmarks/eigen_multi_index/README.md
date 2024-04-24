@@ -12,6 +12,12 @@ make -j24 orig_index_dbl new_index_dbl loop_index_dbl \
  --benchmark_counters_tabular=true \
  --benchmark_out=./output/eigen_index_dbl.csv
 
+ ./nocheck_index_dbl --benchmark_repetitions=30 \
+ --benchmark_display_aggregates_only=true \
+ --benchmark_out_format=csv \
+ --benchmark_counters_tabular=true \
+ --benchmark_out=./output/nocheck_index_dbl.csv
+
 ./orig_index_dbl --benchmark_repetitions=30 \
  --benchmark_display_aggregates_only=true \
  --benchmark_out_format=csv \

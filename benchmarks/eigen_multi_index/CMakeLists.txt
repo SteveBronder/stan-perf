@@ -25,6 +25,20 @@ target_link_libraries(eigen_dbl PRIVATE
   sundials_kinsol
   sundials_cvodes)
 
+
+add_executable(nocheck_index_dbl nocheck_index_dbl.cpp)
+
+target_include_directories(nocheck_index_dbl PRIVATE
+  ${stanbench_SOURCE_DIR}/benchmarks
+  ${boost_INCLUDE_DIR} ${stanmath_SOURCE_DIR} ${stan_SOURCE_DIR}/src)
+target_link_libraries(nocheck_index_dbl PRIVATE
+  benchmark::benchmark
+  TBB::tbb
+  Eigen3::Eigen
+  sundials_kinsol
+  sundials_cvodes)
+
+
 add_executable(orig_index_dbl index_dbl.cpp)
 
 target_include_directories(orig_index_dbl PRIVATE
