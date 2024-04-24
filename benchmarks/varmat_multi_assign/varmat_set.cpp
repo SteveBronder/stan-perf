@@ -1,9 +1,9 @@
-#include <benchmark/benchmark.h>
+#include <utils/setup.hpp>
 #include <stan/math/mix.hpp>
 #include <stan/model/indexing/assign_varmat.hpp>
-#include <varmat_multi_assign/setup.hpp>
+#include <benchmark/benchmark.h>
 
-static void multi_assign(benchmark::State& state) {
+BENCHMARK_DEFINE_F(ArenaAlloc, multi_assign)(benchmark::State& state) {
   using stan::math::var;
   using stan::math::var_value;
   using stan::math::sum;
@@ -35,6 +35,5 @@ static void multi_assign(benchmark::State& state) {
 
 int start_val = 2;
 int end_val = 1024;
-BENCHMARK(toss_me);
-BENCHMARK(multi_assign)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
+BENCHMARK_REGISTER_F(ArenaAlloc, multi_assign)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
 BENCHMARK_MAIN();

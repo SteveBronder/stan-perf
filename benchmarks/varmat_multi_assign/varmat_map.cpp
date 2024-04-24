@@ -1,11 +1,11 @@
-#include <benchmark/benchmark.h>
+#include <utils/setup.hpp>
 #include <stan/math/mix.hpp>
 #include <stan/model/indexing/assign_varmat.hpp>
-#include <varmat_multi_assign/setup.hpp>
 #include <boost/unordered/unordered_map.hpp>
+#include <benchmark/benchmark.h>
 
 template <typename Vec1, typename Vec2>
-inline void new_assign(Vec1&& x, const Vec2& y, const char* name,
+__attribute__((always_inline)) inline void new_assign(Vec1&& x, const Vec2& y, const char* name,
                    const stan::model::index_multi& idx) {
   stan::math::check_size_match("vector[multi] assign", name, idx.ns_.size(),
                                "right hand side", y.size());
@@ -60,7 +60,7 @@ inline void new_assign(Vec1&& x, const Vec2& y, const char* name,
 }
 
 
-static void multi_assign(benchmark::State& state) {
+BENCHMARK_DEFINE_F(ArenaAlloc, multi_assign)(benchmark::State& state) {
   using stan::math::var;
   using stan::math::var_value;
   using stan::math::sum;
@@ -92,6 +92,5 @@ static void multi_assign(benchmark::State& state) {
 
 int start_val = 2;
 int end_val = 1024;
-BENCHMARK(toss_me);
-BENCHMARK(multi_assign)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
+BENCHMARK_REGISTER_F(ArenaAlloc, multi_assign)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
 BENCHMARK_MAIN();

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20.2)
 project(
-    coinbase
+    stanbench
     VERSION 0.0.1
     LANGUAGES C CXX)
 
@@ -61,7 +61,7 @@ set(Boost_USE_STATIC_RUNTIME ON)
 set(BOOST_ENABLE_CMAKE ON)
 FetchContent_Declare(
   boost
-  URL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.gz
+  URL https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.gz
 )
 
 FetchContent_GetProperties(boost)
@@ -93,11 +93,12 @@ if(NOT stan_POPULATED)
 endif()
 
 add_compile_options(
-  -DNO_FPRINTF_OUTPUT 
-  -DBOOST_DISABLE_ASSERTS 
-  -DTBB_INTERFACE_NEW 
-  -D_REENTRANT 
-  -Wno-deprecated-declarations -O3)
+  -DNO_FPRINTF_OUTPUT
+  -DBOOST_DISABLE_ASSERTS
+  -DTBB_INTERFACE_NEW
+  -D_REENTRANT
+  -Wno-deprecated-declarations -O3 -march=native -mtune=native)
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 include_directories(benchmarks)
 add_subdirectory(benchmarks)

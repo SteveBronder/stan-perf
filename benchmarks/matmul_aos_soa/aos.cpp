@@ -1,6 +1,6 @@
-#include <matmul_aos_soa/setup.hpp>
+#include <utils/setup.hpp>
 
-static void matmul_add(benchmark::State& state) {
+BENCHMARK_DEFINE_F(ArenaAlloc, matmul_add)(benchmark::State& state) {
   using stan::math::var;
   using stan::math::sum;
   Eigen::Matrix<double, -1, -1> x_vals = Eigen::MatrixXd::Random(state.range(0), state.range(0));
@@ -25,6 +25,5 @@ static void matmul_add(benchmark::State& state) {
 
 int start_val = 2;
 int end_val = 1024;
-BENCHMARK(toss_me);
-BENCHMARK(matmul_add)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
+BENCHMARK_REGISTER_F(ArenaAlloc, matmul_add)->RangeMultiplier(2)->Range(start_val, end_val)->UseManualTime();
 BENCHMARK_MAIN();
